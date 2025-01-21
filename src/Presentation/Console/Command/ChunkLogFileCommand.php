@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Command;
+namespace App\Presentation\Console\Command;
 
-use App\Domain\Contract\LogFileChunkerInterface;
+use App\Application\Service\LogChunkingService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class ChunkLogFileCommand extends Command
 {
-    public function __construct(private readonly LogFileChunkerInterface $chunker)
+    public function __construct(private readonly LogChunkingService $logChunkingService)
     {
         parent::__construct();
     }
@@ -35,7 +35,7 @@ class ChunkLogFileCommand extends Command
         $chunkSize = (int)$input->getArgument('chunkSize');
 
         try {
-            $chunks = $this->chunker->chunk($filePath, $chunkSize);
+            $chunks = $this->logChunkingService->chunkLogFile($filePath, $chunkSize);
             $output->writeln('<info>Chunks created:</info>');
             foreach ($chunks as $chunk) {
                 $output->writeln($chunk);
