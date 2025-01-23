@@ -28,5 +28,24 @@ services:
     env_file:
       - .env.docker
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    env_file:
+      - .env.docker
+
+  messenger-worker:
+    build:
+      context: .
+    container_name: app-messenger-worker
+    command: php bin/console messenger:consume async --memory-limit=128M
+    depends_on:
+      - rabbitmq
+    volumes:
+      - .:/app
+
 volumes:
   db_data:
