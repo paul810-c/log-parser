@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.log_directory: '%kernel.project_dir%/storage'
+    app.chunk_processor.batch_size: 1000
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -17,20 +18,25 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Entity/'
+            - '../src/Domain/Model/'
             - '../src/Kernel.php'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
     App\Domain\Contract\FileStorageInterface: '@App\Infrastructure\Storage\LocalFileStorage'
+    App\Domain\Contract\LogRepositoryInterface: '@App\Infrastructure\Repository\LogRepository'
     App\Infrastructure\Storage\LocalFileStorage:
         arguments:
             $filesystem: '@filesystem'
-
     App\Domain\Contract\FileHandlerInterface: '@App\Domain\Service\FileHandler'
     App\Domain\Contract\PathManagerInterface: '@App\Domain\Service\PathManager'
     App\Domain\Service\PathManager:
         arguments:
             $baseDir: '%app.log_directory%'
     App\Domain\Contract\LogFileChunkerInterface: '@App\Domain\Service\LogFileChunker'
+    App\Domain\Service\Contract\LogParserInterface: '@App\Domain\Service\LogParser'
+    App\Domain\Service\Contract\ChunkProcessorInterface: '@App\Domain\Service\ChunkProcessor'
+    App\Domain\Service\ChunkProcessor:
+        arguments:
+            $batchSize: '%app.chunk_processor.batch_size%'
