@@ -21,7 +21,7 @@ final class Version20250127143724 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SEQUENCE log_entries_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE log_entries (id INT NOT NULL, service_name VARCHAR(55) NOT NULL, timestamp TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, http_method VARCHAR(10) NOT NULL, endpoint VARCHAR(255) NOT NULL, status_code INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE log_entries (id SERIAL NOT NULL, service_name VARCHAR(55) NOT NULL, timestamp TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, http_method VARCHAR(10) NOT NULL, endpoint VARCHAR(255) NOT NULL, status_code INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN log_entries.timestamp IS \'(DC2Type:datetime_immutable)\'');
     }
 

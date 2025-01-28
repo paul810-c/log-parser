@@ -10,9 +10,19 @@ framework:
             # sync: 'sync://'
             async: # Define RabbitMQ transport
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy:
+                    max_retries: 5               # Maximum number of retries
+                    delay: 1000                  # Initial delay in milliseconds
+                    multiplier: 2                # Exponential backoff multiplier
+                    max_delay: 60000             # Maximum delay in milliseconds
                 options:
                     exchange:
                         name: logs
+                    queues:
+                        chunk_processing_queue:
+                            arguments:
+                                x-dead-letter-exchange: 'logs'
+                                x-dead-letter-routing-key: 'dead_letters'
         routing:
             # Route your messages to the transports
             # 'App\Message\YourMessage': async

@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace App\Domain\Model;
 
-use App\Repository\LogEntryRepository;
+use App\Infrastructure\Repository\LogRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
 #[ORM\Table(name: 'log_entries')]
-//#[ORM\Entity(repositoryClass: LogEntryRepository::class)]
+#[ORM\Entity(repositoryClass: LogRepository::class)]
 class LogEntry
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]  // This ensures the ID is generated automatically
     #[ORM\Column(type: 'integer')]
     private int $id;
 

@@ -11,9 +11,11 @@ class LogParser implements LogParserInterface
 {
     public function parse(string $line): LogEntry
     {
-        $pattern = '/^(?<serviceName>[^\\s]+) - - \\[(?<date>[^\\]]+)] \\\"(?<method>[^\\s]+) (?<endpoint>[^\\s]+) [^\\\"]+\\\" (?<statusCode>\\d+)/';
-
+        //$pattern = '/^(?<serviceName>[^\\s]+) - - \\[(?<date>[^\\]]+)] \\\"(?<method>[^\\s]+) (?<endpoint>[^\\s]+) [^\\\"]+\\\" (?<statusCode>\\d+)/';
+        // $pattern = '/^(?<serviceName>[^\\s]+) - - \\[(?<date>[^\\]]+)] \\\"(?<method>[^\\s]+) (?<endpoint>[^\\s]+) [^\\\"]+\\\" (?<statusCode>\\d+)/';
+        $pattern = '/^(?<serviceName>[^\s]+) - - \[(?<date>[^\]]+)] "(?<method>[^\s]+) (?<endpoint>[^\s]+) [^"]+" (?<statusCode>\d+)/';
         if (!preg_match($pattern, $line, $matches)) {
+            //dd($line);
             throw new \InvalidArgumentException("Invalid log line format: $line");
         }
 
